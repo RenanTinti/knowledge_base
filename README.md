@@ -3,31 +3,34 @@ Knowledge Base structure for companies, being able to unify processes, tools and
 
 Requirements:
 
-- Python 3.x
+- Python 3.x: 
 https://www.python.org/downloads/
 
-- Virtual environment (optional, but recommended)
+- Virtual environment (optional, but recommended): 
 python -m venv venv
+
 .\venv\Scripts\Activate.ps1
 
-- Django framework
+- Django framework: 
 pip install django
 
-- CKEditor
+- CKEditor: 
 pip install django-ckeditor
 
-- Crispy forms
+- Crispy forms: 
 pip install django-crispy-forms
 
-- Crispy Bootstrap
+- Crispy Bootstrap: 
 pip install crispy-bootstrap5
 
 
-To start the server:
+To start the server: 
 python manage.py runserver
 
 Login adm: admin
+
 Password: testadmin00
 
 Login user: user
+
 Password: testuser00
