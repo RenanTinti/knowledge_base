@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}
+Profile
+{% endblock %}
+
+{% block content %}
+
+<div class="m-10 flex flex-nowrap">
+    <div class=" w-8/12">
+        <div class="font-bold text-3xl py-4">Profile</div>
+        <div>If any information is wrong or missing, please contact our support</div>
+        <div><b>support@companyname.com</b></div>
+        <div class="mt-10">
+            <ul>
+                <li class="py-2"><b>Name:</b> {{ request.user.first_name }} {{ request.user.last_name }}</li>
+                <li><b>E-mail:</b> {{ request.user.email }}</li>
+            </ul>
+        </div>
+        <div>
+            <div class="font-bold text-2xl py-4 mt-10">Change Password</div>
+            <div class=" w-8/12 mb-10">
+                <form method="post">
+                    {{ form|crispy }}
+                    {% csrf_token %}
+                    <button type="submit"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

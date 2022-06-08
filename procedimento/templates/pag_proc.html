@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+{{ object.titulo }}
+{% endblock %}
+
+{% block content %}
+
+<div class="m-10 flex flex-nowrap">
+    <div class=" w-8/12">
+        <div class="font-bold text-3xl py-4 mb-4">{{ object.titulo }}</div>
+        <div>
+            {{ object.descricao | safe | urlize | linebreaks }}
+        </div>
+    </div>
+
+    <div class="pl-48 mt-28 w-4/12">
+        <ul>
+            <li class="text-center text-white font-bold bg-blue-500 p-2 border-2">Related</li>
+            {% for procedimento in relacionados %}
+                {% if procedimento.ativo %}
+                    <li class="border-b-2 border-r-2 border-l-2 p-1 text-sm"><a href="{% url 'procedimento:pag_proc' procedimento.pk %}">{{ procedimento.titulo }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+    
+{% endblock %}

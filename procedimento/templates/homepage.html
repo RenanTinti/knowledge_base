@@ -1,0 +1,208 @@
+<!-- O conteúdo é inserido dinamicamente na página através dos blocks. Em toda página html, deve-se puxar o extends do arquivo base.html -->
+
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block titulo %}
+Knowledge Base
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+{% block head %}
+<style>
+    .accordion {
+        color: #444;
+        cursor: pointer;
+        padding: 8px;
+        width: 100%;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+    .active,
+    .accordion:hover {
+        background-color: rgb(186 230 253);
+    }
+
+    .panel {
+        padding: 18px 18px;
+        display: none;
+        background-color: rgb(224 242 254);
+        overflow: hidden;
+    }
+
+    #todos {
+        color: #444;
+        cursor: pointer;
+        padding: 8px;
+        width: 100%;
+        text-align: left;
+        outline: none;
+        font-size: 15px;
+        transition: 0.4s;
+    }
+
+    #todos:hover {
+        background-color: rgb(186 230 253);
+    }
+
+    #novo {
+        animation: animate 1.5s linear infinite;
+    }
+
+    @keyframes animate{
+        0%{
+            opacity: 0;
+        }
+        50%{
+            opacity: 1;
+        }
+        100%{
+            opacity: 0;
+        }
+    }
+
+</style>
+{% endblock %}
+
+
+<div class="m-10">
+    <div class="text-3xl font-bold py-4">
+        Welcome, {{ request.user.first_name }}!
+    </div>
+    <div class="flex flex-nowrap py-4">
+        <div class="w-8/12 border-2">
+            <ul>
+                <li class="text-center text-white font-bold bg-blue-500 p-2 border-2">Billboard</li>
+                {% for comunicado in comunicados %}
+                {% if forloop.counter < 10 %} <button class="accordion border-t-2 flex justify-between">
+                    <div>{{ comunicado.titulo }}</div>
+                    <div class="flex no-wrap">
+                        {% if hoje == comunicado.date %}
+                        <p id="novo" class="mr-8 text-green-500 font-bold">New!</p>
+                        {% endif %}
+                        <div>{{ comunicado.hoje }}</div>
+                        <div>{{ comunicado.date }}</div>
+                    </div>
+                    </button>
+                    <div class="panel">
+                        <p>{{ comunicado.descricao | safe | urlize | linebreaks }}</p>
+                        <br>
+                        <p>Created: {{ comunicado.data_criacao }}</p>
+                        <p>Author: {{ comunicado.author.first_name |add:' '|add:comunicado.author.last_name }}</p>
+                        <p>Group: {{ comunicado.grupo }}</p>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    <a href="{% url 'procedimento:comunicados' %}">
+                        <button id="todos" class="border-t-2 font-bold"> View more... </button>
+                    </a>
+            </ul>
+        </div>
+        <div class="w-8/12 ml-10 flex flex-nowrap justify-between">
+            <div class="flex justify-center mr-10">
+                <div class="rounded-lg bg-white max-w-sm">
+                    <div class="flex justify-center items-center w-full h-48">
+                        <img class="rounded-t-lg rounded-b-lg" src="{% static 'images/topics.png' %}" width="200px"
+                            height="200px" />
+                    </div>
+                    <div class="p-6">
+                        <h5 class="text-gray-900 text-xl font-medium mb-4 mt-4">Procedures</h5>
+                        <p class="text-gray-700 text-base mb-4">
+                            Nam aliquet iaculis ligula, et hendrerit mi faucibus nec. Duis dapibus diam at ligula aliquet ullamcorper. Sed at vehicula urna.
+                        </p>
+                        <a href="{% url 'procedimento:procedimentos' %}">
+                            <button type="button"
+                                class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Access</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="flex justify-center mr-10">
+                <div class="rounded-lg bg-white max-w-sm">
+                    <div class="flex justify-center items-center w-full h-48">
+                        <img class="rounded-t-lg rounded-b-lg" src="{% static 'images/engrenagem.png' %}" width="200px"
+                            height="200px" />
+                    </div>
+                    <div class="p-6">
+                        <h5 class="text-gray-900 text-xl font-medium mb-4 mt-4">Tools</h5>
+                        <p class="text-gray-700 text-base mb-4">
+                            Nam aliquet iaculis ligula, et hendrerit mi faucibus nec. Duis dapibus diam at ligula aliquet ullamcorper. Sed at vehicula urna.
+                        </p>
+                        <a href="{% url 'procedimento:ferramentas' %}">
+                            <button type="button"
+                                class=" inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out">Access</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <div class="text-2xl font-bold py-4">
+            Any suggestion?
+        </div>
+        <div>
+            If you have any suggestions for improvement in our Knowledge Base, or if you want to suggest the insertion of some
+            procedure, please describe in the field below and click "Send".
+        </div>
+        <div class="my-3 w-full">
+            <form method="post">
+                {% csrf_token %}
+                {{ form|crispy }}
+
+                <button type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-bs-toggle="modal" data-bs-target="#exampleModal" id="buttonModal">
+                    Send
+                </button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Warning:</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                By clicking "<b>Submit</b>", your suggestion will be automatically forwarded. <br><br>
+                                Confirm?
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" data-bs-dismiss="modal">Cancel</button>
+                                <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" data-bs-dismiss="modal">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    
+</div>
+
+<script>
+    
+
+    var acc = document.getElementsByClassName("accordion");
+    var i;
+
+    for (i = 0; i < acc.length; i++) {
+        acc[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+            var panel = this.nextElementSibling;
+            if (panel.style.display === "block") {
+                panel.style.display = "none";
+            } else {
+                panel.style.display = "block";
+            }
+        });
+    }
+</script>
+
+{% endblock %}

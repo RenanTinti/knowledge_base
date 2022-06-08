@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Search Result
+{% endblock %}
+
+{% block content %}
+
+<div class="m-10 flex flex-nowrap">
+    <div class=" w-full">
+        <div class="font-bold text-3xl py-4 mb-4">Search Result</div>
+        <ul>
+            {% if object_list %}
+                {% for procedimento in object_list %}
+                    {% if procedimento.ativo %}
+
+                        <!-- Será passada a tag url para o href, e dentro dessa tag, o Django saberá qual procedimento acessar através do pk (primary key ou id) do procedimento -->
+                        <li class="py-2 flex flex-nowrap justify-between">
+                            <a href="{% url 'procedimento:pag_proc' procedimento.pk %}" class="text-2xl font-bold">
+                                {{ procedimento }}
+                            </a>
+                            <div class="text-sm mt-1">{{ procedimento.grupo }}</div>
+                        </li>
+                        <div class="py-6">
+                            {{ procedimento.subtitulo }}
+                        </div>
+                        <hr>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+            <p>No results found</p>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+    
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block titulo %}
+Procedures List
+{% endblock %}
+
+{% block content %}
+
+<div class="m-10 flex flex-nowrap">
+    <div class=" w-8/12">
+        <div class="font-bold text-3xl py-4 mb-4">Procedures List</div>
+        <ul>
+            {% for procedimento in procedimentos %}
+                {% if procedimento.ativo %}
+
+                    <!-- Será passada a tag url para o href, e dentro dessa tag, o Django saberá qual procedimento acessar através do pk (primary key ou id) do procedimento -->
+                    <li class="py-2 flex flex-nowrap justify-between">
+                        <a href="{% url 'procedimento:pag_proc' procedimento.pk %}" class="text-2xl font-bold">
+                            {{ procedimento }}
+                        </a>
+                        <div class="text-sm mt-1">{{ procedimento.grupo }}</div>
+                    </li>
+                    <div class="py-6">
+                        {{ procedimento.subtitulo }}
+                    </div>
+                    <hr>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="pl-48 mt-24 w-4/12">
+        <ul>
+            <li class="text-center text-white font-bold bg-blue-500 p-2 border-2">Most seen</li>
+            {% for procedimento in mais_vistos %}
+                {% if procedimento.ativo %}
+                    <li class="border-b-2 border-r-2 border-l-2 p-1 text-sm"><a href="{% url 'procedimento:pag_proc' procedimento.pk %}">{{ procedimento.titulo }}</a></li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+    
+{% endblock %}
