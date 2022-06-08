@@ -9,6 +9,7 @@ https://www.python.org/downloads/
 - Virtual environment (optional, but recommended): 
 python -m venv venv
 
+- Activate virtual environment: 
 .\venv\Scripts\Activate.ps1
 
 - Django framework: 
